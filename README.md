@@ -74,3 +74,7 @@ If you are interested in the resources that were used to create this repository,
 -   [ ] Ensure rollbacks work
 -   [ ] Robustify negotiation process and allow polite peers to
 -   [ ] Create media stream handler
+
+---
+
+Best of Luck with you WebRTC adventures. If you have any feedback, don't hestitate to reach out ☺.
