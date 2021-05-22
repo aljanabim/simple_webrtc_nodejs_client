@@ -9,16 +9,27 @@
     "scripts": {
         "start": "env-cmd -f ./config/prod.env node server.js",
         "dev": "env-cmd -f ./config/dev.env nodemon server.js",
-        "client1": "nodemon ./examples/example-client1.js",
-        "client2": "nodemon ./examples/example-client2.js"
+        "chat": "env-cmd -f ./config/dev.env node examples/chat/server.js"
     },
     "dependencies": {
+        "inquirer": "^8.1.0",
+        "nodemon": "^2.0.4",
         "socket.io-client": "^4.0.1",
         "wrtc": "^0.4.7",
         "yargs": "^17.0.1"
     },
     "devDependencies": {
-        "env-cmd": "^10.1.0",
-        "nodemon": "^2.0.4"
+        "env-cmd": "^10.1.0"
+    },
+    "keywords": [
+        "client",
+        "webrtc",
+        "peer-to-peer",
+        "signaling",
+        "socket.io",
+        "websocket"
+    ],
+    "engines": {
+        "node": "14.x"
     }
 }
