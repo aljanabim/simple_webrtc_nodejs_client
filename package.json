@@ -9,7 +9,8 @@
     "scripts": {
         "start": "env-cmd -f ./config/prod.env node server.js",
         "dev": "env-cmd -f ./config/dev.env nodemon server.js",
-        "chat": "env-cmd -f ./config/dev.env node examples/chat/server.js"
+        "chat": "env-cmd -f ./config/dev.env node examples/chat/server.js",
+        "ros": "env-cmd -f ./config/dev.env node examples/ros/server.js"
     },
     "dependencies": {
         "inquirer": "^8.1.0",
