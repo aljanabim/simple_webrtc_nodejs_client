@@ -59,8 +59,8 @@ const rosMenu = [
 
 const send = (destination, type, message) => {
     const full_message = JSON.stringify({
-        "type": type,
-        "message": message
+        "message_type": type,
+        "content": message
     })
     if (destination === "All") {
         for (peer in manager.peers) {

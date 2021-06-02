@@ -22,12 +22,20 @@ function dataChannelHandler(ourPeerId, ourPeerType, peer) {
         */
     };
     const onMessage = (event) => {
-        /*
-            YOUR CODE HERE - This code is executed when a message is recieved from the peer.
-            For example, extract the data and log it to the console:
-        */
         const { data } = event;
-        console.log(peerId, "says:", `"${data}"`); // put peer data inside quotation marks
+        const msg = JSON.parse(data);
+        if (msg.message_type === "launch"){
+          console.log("Launching ", msg.content, " b/c ", peerId,
+                      " wants to");
+
+        } else if (msg.message_type === "stop"){
+          console.log("Stopping ROS b/c ", peerId, " wants to");
+
+        } else {
+          console.log("Received ROS message for topic ", msg.message_type,
+                      " from ", peerId);
+
+        }
     };
     const onClose = (event) => {
         /*
