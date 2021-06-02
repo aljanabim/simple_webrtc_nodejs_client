@@ -11,6 +11,9 @@
  * @param {RTCDataChannel} peer.dataChannel - RTC data channel object
  * @param {Function} peer.remove - Closes all connections and removes the peer. Automatically called when peer leaves signaling server.
  */
+
+const rosApi = require("../ros-api");
+
 function dataChannelHandler(ourPeerId, ourPeerType, peer) {
     const peerId = peer.peerId;
     const channel = peer.dataChannel;
@@ -25,23 +28,19 @@ function dataChannelHandler(ourPeerId, ourPeerType, peer) {
         const { data } = event;
         const msg = JSON.parse(data);
         if (msg.message_type === "launch"){
-          console.log("Launching ", msg.content, " b/c ", peerId,
-                      " wants to");
-
+          rosApi.launch("rosLaunchProcess", "roslaunch",
+                        msg.content.fileName);
+          rosApi.setup(msg.content.config, channel);
         } else if (msg.message_type === "stop"){
-          console.log("Stopping ROS b/c ", peerId, " wants to");
-
+          rosApi.stopAll();
         } else {
           console.log("Received ROS message for topic ", msg.message_type,
                       " from ", peerId);
-
+          rosApi.message(msg.message_type, msg.content);
         }
     };
     const onClose = (event) => {
-        /*
-            YOUR CODE HERE - This code is executed when the data channel is closed.
-            For example, log the closing event to the console:
-        */
+      rosApi.stopAll();
     };
 
     channel.onopen = (event) => {

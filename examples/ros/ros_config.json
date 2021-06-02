@@ -9,18 +9,16 @@
 
     "robot0": {
         "webrtc_node_pubs": [
-            {"namespace": "robot1/", "topic": "chatter", "ros_message_type": "std_msgs/String"}
+            {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
         ],
         "webrtc_node_subs": [
-            {"namespace": "robot0/", "topic": "chatter", "ros_message_type": "std_msgs/String"},
-            {"namespace": "", "topic": "meeting_location", "ros_message_type": "geometry_msgs/Point"}
+            {"namespace": "robot0", "topic": "location", "ros_message_type": "geometry_msgs/Point"}
         ]
     },
 
     "robot1": {
         "webrtc_node_pubs": [
-            {"namespace": "robot0/", "topic": "chatter", "ros_message_type": "std_msgs/String"},
-            {"namespace": "", "topic": "meeting_location", "ros_message_type": "geometry_msgs/Point"}
+            {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
         ],
         "webrtc_node_subs": [
             {"namespace": "robot1/", "topic": "chatter", "ros_message_type": "std_msgs/String"}
