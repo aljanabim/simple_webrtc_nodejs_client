@@ -19,6 +19,9 @@ const webrtcOptions = { enableDataChannel: true, enableStreams: false, dataChann
 
 const inquirer = require("inquirer");
 
+// LOAD ROS CONFIG
+const rosConfig = require('./ros_config.json')
+
 console.log("Starting up the WebRTC ROS Node Example");
 
 const questions = [
@@ -89,9 +92,19 @@ const launchQuestions = (peersArray) => [
 ];
 const launch = (peersArray) => {
     inquirer.prompt(launchQuestions(peersArray)).then((launchAnswers) => {
-        send(launchAnswers.sendTo, "launch",
-             launchAnswers.launchFileName);
-        rosApp();
+      var launchMsg = {
+          "config": rosConfig["default"],
+          "fileName": launchAnswers.launchFileName
+      };
+      if (rosConfig[launchAnswers.sendTo]) {
+          launchMsg = {
+              "config": rosConfig[launchAnswers.sendTo],
+              "fileName": launchAnswers.launchFileName,
+          }
+      }
+      send(launchAnswers.sendTo, "launch",
+           launchMsg);
+      rosApp();
     });
 };
 
