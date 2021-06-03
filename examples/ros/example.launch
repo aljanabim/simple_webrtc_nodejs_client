@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- START ROSBRIDGE WEBSOCKET SERVER -->
+    <include file="$(find rosbridge_server)/launch/rosbridge_websocket.launch">
+        <arg name="port" value="9090"/>
+    </include>
+</launch>

@@ -7,7 +7,7 @@ const processes = {};
 const pubTopics = {};
 const subTopics = {};
 
-const launch = (name, command, _port = 9090) => {
+const launch = (name, command, args, _port = 9090) => {
     processes[name] = spawn(command, [...args]);
     port = _port;
     processes[name].stdout.on("data", (data) => {
@@ -55,10 +55,13 @@ const initRos = () => {
     });
 };
 
-const setup = (my_config, channel) => {
+
+const setup_topics = (my_config, channel) => {
+
     // create ROS publication topics
-    for (var pub_config in my_config.webrtc_node_pubs) {
-        var topic_name = pub_config["namespace"] + pub_config["topic"];
+    for (var config_idx in my_config.webrtc_node_pubs) {
+        var pub_config = my_config.webrtc_node_pubs[config_idx];
+        var topic_name = pub_config.namespace + pub_config.topic;
         // to prevent echos don't allow same name for pub and sub
         if (topic_name in subTopics) {
             console.log('Found duplicate name; ignoring publication ',
@@ -69,13 +72,16 @@ const setup = (my_config, channel) => {
                 name : topic_name,
                 messageType : pub_config.ros_message_type
             });
+            pub.advertise();
             pubTopics[topic_name] = pub;
         }
     }
+    console.log("Created publications ", pubTopics);
 
     // create ROS subscription topics
-    for (var sub_config in my_config.webrtc_node_subs) {
-        var topic_name = sub_config["namespace"] + sub_config["topic"];
+    for (var config_idx in my_config.webrtc_node_subs) {
+        var sub_config = my_config.webrtc_node_subs[config_idx];
+        var topic_name = sub_config.namespace + sub_config.topic;
         // to prevent echos don't allow same name for pub and sub
         if (topic_name in pubTopics) {
             console.log('Found duplicate name; ignoring subscription ',
@@ -86,33 +92,49 @@ const setup = (my_config, channel) => {
                 name : topic_name,
                 messageType : sub_config.ros_message_type
             });
+            // subscribe to topic
+            var sub_callback = function(topic_name) {
+                return function(message) {
+                    console.log("Heard data from ", topic_name, ", sending it off");
+                    const full_message = JSON.stringify({
+                        "message_type": topic_name,
+                        "content": message
+                    })
+                    channel.send(full_message);
+                }
+            }(topic_name);
+            sub.subscribe(sub_callback);
             subTopics[topic_name] = sub
         }
     }
-
-    // create subscription callbacks (send data onto data channel)
-    for (var topic_name in subTopics) {
-        var sub_callback = function(topic_name) {
-            return function(message) {
-                console.log("Heard data from ", sub, ", sending it off");
-                const full_message = JSON.stringify({
-                    "message_type": topic_name,
-                    "content": message
-                })
-                channel.send(full_message);
-            }
-        }(topic_name);
-        subTopics[topic_name].subscribe(sub_callback);
-        console.log('WebRTC node subscribed to ', topic_name);
-    }
+    console.log("Created subscriptions ", subTopics);
+};
+const setup = (my_config, channel) => {
+    (async() => {
+        while(!ros) {
+            console.log("Waiting for ROS network to finish setting up");
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        setup_topics(my_config, channel);
+    })();
 };
 
 const message = (name, message) => {
-    const msg = new ROSLIB.Message({ ...message });
-    if (pubTopics[name]) {
-      pubTopics[name].publish(msg);
+    try {
+        const msg = new ROSLIB.Message(JSON.parse(message));
+    } catch(err) {
+        console.log("Received an invalid message: ", message);
+        return;
+    }
+
+    if (ros) {
+        if (pubTopics[name]) {
+          pubTopics[name].publish(msg);
+        } else {
+          console.log("Trying to publish to unconfigured topic");
+        }
     } else {
-      console.log("Trying to publish to unconfigured topic");
+        console.log("ROS network not established yet");
     }
 };
 
