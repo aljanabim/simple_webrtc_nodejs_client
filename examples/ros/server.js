@@ -162,6 +162,7 @@ const rosApp = () => {
         }
         if (!menuAnswers.rosAction) {
             console.log("Did not give a number");
+            rosApp();
         } else if (menuAnswers.rosAction === 1) {
             launch(peersArray)
         } else if (menuAnswers.rosAction === 2) {
