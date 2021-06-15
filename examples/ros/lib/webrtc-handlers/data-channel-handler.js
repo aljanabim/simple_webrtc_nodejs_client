@@ -25,16 +25,21 @@ function dataChannelHandler(ourPeerId, ourPeerType, peer) {
         */
     };
     const onMessage = (event) => {
-        const { data } = event;
-        const msg = JSON.parse(data);
-        if (msg.message_type === "launch"){
-            rosApi.launch("rosLaunchProcess", "roslaunch",
-                          [msg.content.fileName]);
-            rosApi.setup(msg.content.config, channel);
-        } else if (msg.message_type === "stop"){
+        try {
+            const { data } = event;
+            const msg = JSON.parse(data);
+            if (msg.message_type === "launch"){
+                rosApi.launch("rosLaunchProcess", "roslaunch",
+                              [msg.content.fileName]);
+                rosApi.setup(msg.content.config, channel);
+            } else if (msg.message_type === "stop"){
+                rosApi.stopAll();
+            } else {
+                rosApi.message(msg.message_type, msg.content);
+            }
+        } catch (error) {
+            console.error(error);
             rosApi.stopAll();
-        } else {
-            rosApi.message(msg.message_type, msg.content);
         }
     };
     const onClose = (event) => {
