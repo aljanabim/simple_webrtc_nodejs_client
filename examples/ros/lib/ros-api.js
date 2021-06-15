@@ -122,19 +122,18 @@ const setup = (my_config, channel) => {
 const message = (name, message) => {
     try {
         const msg = new ROSLIB.Message(JSON.parse(message));
+        if (ros) {
+            if (pubTopics[name]) {
+              pubTopics[name].publish(msg);
+            } else {
+              console.log("Trying to publish to unconfigured topic");
+            }
+        } else {
+            console.log("ROS network not established yet");
+        }
     } catch(err) {
         console.log("Received an invalid message: ", message);
         return;
-    }
-
-    if (ros) {
-        if (pubTopics[name]) {
-          pubTopics[name].publish(msg);
-        } else {
-          console.log("Trying to publish to unconfigured topic");
-        }
-    } else {
-        console.log("ROS network not established yet");
     }
 };
 
