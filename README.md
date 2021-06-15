@@ -10,6 +10,7 @@ WebRTC is an evolving technology for peer-to-peer communication on the web. This
     -   [Production](#Production)
 -   [Examples](#Examples)
     -   [Terminal Chat App](#terminal-chat-app)
+    -   [ROS Client App](#ros-client-app)
 -   [Implement Your Own Logic](#implement-your-own-logic)
     -   [Overall app logic](#overall-app-logic)
     -   [Utilize the WebRTC Data Channel](#utilize-the-webrtc-data-channel)
@@ -67,6 +68,20 @@ yarn chat
 ```
 
 The code for the chat app is found in [/examples/chat](/examples/chat)
+
+### ROS Client App
+
+Is an example showing how WebRTC can be utilized for operating and sending data between two robots using [ROS](https://www.ros.org/). It uses Rosbridge server to communicate between ROS and Node.js. The data between the robots is, then, sent across the RTCDataChannel. For more details, make sure to checkout the [README](./examples/ros/README.md) of the example.
+
+You can play with the examples by running
+
+```bash
+yarn ros
+```
+
+The code for the ROS client app is found in [/examples/ros](/examples/ros).
+
+Checkout the [README](./examples/ros/README.md) of the example to understand how it works.
 
 ## Implement Your Own Logic
 
