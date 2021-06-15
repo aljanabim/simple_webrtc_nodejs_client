@@ -98,7 +98,7 @@ const setup_topics = (my_config, channel) => {
                     console.log("Heard data from ", topic_name, ", sending it off");
                     const full_message = JSON.stringify({
                         "message_type": topic_name,
-                        "content": message
+                        "content": JSON.stringify(message)
                     })
                     channel.send(full_message);
                 }
@@ -129,7 +129,8 @@ const message = (name, message) => {
               console.log("Trying to publish to unconfigured topic");
             }
         } else {
-            console.log("ROS network not established yet");
+            console.log("Received message: ", message);
+            console.log("However, ROS network not established yet");
         }
     } catch(err) {
         console.log("Received an invalid message: ", message);
