@@ -58,9 +58,9 @@ const initRos = () => {
 
 const setup_topics = (my_config, channel) => {
 
-    // create ROS publication topics
-    for (var config_idx in my_config.webrtc_node_pubs) {
-        var pub_config = my_config.webrtc_node_pubs[config_idx];
+    // create ROS publication topics for inbound data
+    for (var config_idx in my_config.webrtc_node_inbound) {
+        var pub_config = my_config.webrtc_node_inbound[config_idx];
         var topic_name = pub_config.namespace + pub_config.topic;
         // to prevent echos don't allow same name for pub and sub
         if (topic_name in subTopics) {
@@ -78,9 +78,9 @@ const setup_topics = (my_config, channel) => {
     }
     console.log("Created publications ", pubTopics);
 
-    // create ROS subscription topics
-    for (var config_idx in my_config.webrtc_node_subs) {
-        var sub_config = my_config.webrtc_node_subs[config_idx];
+    // create ROS subscription topics for outbound data
+    for (var config_idx in my_config.webrtc_node_outbound) {
+        var sub_config = my_config.webrtc_node_outbound[config_idx];
         var topic_name = sub_config.namespace + sub_config.topic;
         // to prevent echos don't allow same name for pub and sub
         if (topic_name in pubTopics) {
