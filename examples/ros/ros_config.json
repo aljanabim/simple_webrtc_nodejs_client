@@ -1,0 +1,27 @@
+{
+    "default": {
+        "webrtc_node_inbound": [
+            {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
+        ],
+        "webrtc_node_outbound": [
+        ]
+    },
+
+    "robot0": {
+        "webrtc_node_inbound": [
+            {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
+        ],
+        "webrtc_node_outbound": [
+            {"namespace": "robot0/", "topic": "location", "ros_message_type": "geometry_msgs/Point"}
+        ]
+    },
+
+    "robot1": {
+        "webrtc_node_inbound": [
+            {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
+        ],
+        "webrtc_node_outbound": [
+            {"namespace": "robot1/", "topic": "chatter", "ros_message_type": "std_msgs/String"}
+        ]
+    }
+}
