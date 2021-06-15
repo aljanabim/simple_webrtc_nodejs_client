@@ -27,12 +27,44 @@ simplicity.
 
 ## Configuration
 In `ros_config.json`, you will find an example configuration of the
-application's ROS publications and subscriptions. This json file is sent to your
+application's inbound and outbound ROS topics. This json file is sent to your
 peer when you remotely run a launch file. When the json file is received and
 the ROS network has finish setting up, the json file is used automatically to
-create the publications and subscriptions. It's important to note that the
-application spins up a ROS node of it's own, in addition to the nodes spun up
-by the launch file.
+create the publications and subscriptions of the ROS node embedded in the
+javascript application. It's important to understand that the application spins
+up a ROS node of it's own, in addition to the nodes spun up by the launch file.
+
+We have purposefully chosen to use the terms `inbound` and `outbound` as opposed
+to the more typical `publication` and `subscription`. This is due to the fact
+that the ROS node embedded in the application is used primarily to perform
+forwarding, similar to
+[bridges in networking](https://en.wikipedia.org/wiki/Bridging_(networking)#Forwarding).
+We can take an example from the config file in this repo, `ros_config.json` for
+a clearer explanation:
+```json
+"robot0": {
+    "webrtc_node_inbound": [
+        {"namespace": "", "topic": "chat", "ros_message_type": "std_msgs/String"}
+    ],
+    "webrtc_node_outbound": [
+        {"namespace": "robot0/", "topic": "location", "ros_message_type": "geometry_msgs/Point"}
+    ]
+}
+```
+In this configuration, we specify that we want `robot0` to have an inbound topic
+called `chat` and an outbound topic called `robot0/location`. With this
+configuration, the application will automatically create ROS publishers and
+subscribers to support the desired configuration. A publisher will be created to
+locally publish inbound `chat` data received from a remote peer. `chat` is an
+`inbound` topic because the data flows from remote peers into the local network.
+Then, a subscriber will be created to locally listen for `robot0/location` data
+and has a auto-generated callback function that will send the data outwards to
+remote peers. `robot0/location` is an `outbound` topic because data flows from
+the local network out to the remote peers. The network formed by this
+configuration can be seen in the following diagram, where we have colored the
+inbound data stream green and the outbound data stream blue:
+
+![webrtc_ros_diagram](./webrtc_ros_diagram.png)
 
 ## Example application use
 Open up two terminal windows. In each, run
