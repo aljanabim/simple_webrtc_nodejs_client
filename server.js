@@ -14,7 +14,7 @@ const PEER_TYPE = "admin";
 // SETUP SIGNALING CHANNEL AND WEBRTC
 const channel = new SignalingChannel(PEER_ID, PEER_TYPE, SIGNALING_SERVER_URL, TOKEN);
 const webrtcOptions = { enableDataChannel: true, enableStreams: false, dataChannelHandler };
-const manager = new WebrtcManager(PEER_ID, PEER_TYPE, channel, webrtcOptions);
+const manager = new WebrtcManager(PEER_ID, PEER_TYPE, channel, webrtcOptions, (verbose = true));
 channel.connect();
 
 /*
