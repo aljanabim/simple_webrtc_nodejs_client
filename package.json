@@ -15,13 +15,13 @@
     "dependencies": {
         "inquirer": "^8.1.0",
         "roslib": "^1.1.0",
-        "nodemon": "^2.0.4",
         "socket.io-client": "^4.0.1",
         "wrtc": "^0.4.7",
+        "env-cmd": "^10.1.0",
         "yargs": "^17.0.1"
     },
     "devDependencies": {
-        "env-cmd": "^10.1.0"
+        "nodemon": "^2.0.4"
     },
     "keywords": [
         "client",
