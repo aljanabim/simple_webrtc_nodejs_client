@@ -38,6 +38,7 @@ function dataChannelHandler(ourPeerId, ourPeerType, peer) {
 
     channel.onopen = (event) => {
         if (event.type === "open") {
+            channel.binaryType = 'arraybuffer';
             channel.onmessage = onMessage;
             channel.onclose = onClose;
             onOpen(event);
